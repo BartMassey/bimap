@@ -22,6 +22,9 @@ bijection, existing conflicting mappings will first be
 deleted to preserve the bijection. This could be cause two
 existing mappings to be deleted: see the example below.
 
+Use `pydoc` to generate complete API documentation for this
+module.
+
 ## Example
 
     >>> from bimap import *
