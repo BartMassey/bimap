@@ -6,6 +6,10 @@
 
 """Bijective map."""
 
+# Unique value for defaulting a missing keyword argument.
+# http://stackoverflow.com/questions/10599346
+_BiDict__default = object()
+
 class BiDict(dict):
     """Specialized subclass of dict() used internally by BiMap
     its keys and values mappings. This class overrides
@@ -49,19 +53,16 @@ class BiDict(dict):
         dict.__setitem__(self, key, value)
         dict.__setitem__(self.codict, value, key)
 
-    def pop(self, key, *args):
+    def pop(self, key, d=__default):
         """Remove specified key and return the
         corresponding value.  If key is not found, d is
         returned if given, otherwise KeyError is raised.
         """
-        if len(*args) > 1:
-            raise TypeError(
-                'pop() takes 1 optional argument but more were given')
         if key not in self:
-            if len(args) == 0:
+            if d is __default:
                 raise KeyError(key)
             else:
-                return args[0]
+                return d
         value = self[key]
         del self[key]
         return value
@@ -74,7 +75,7 @@ class BiDict(dict):
         dict.__delitem__(self.codict, v)
         return (k, v)
 
-    def setdefault(k, *args):
+    def setdefault(k, d=__default):
         """Defaulting a BiDict is disallowed as useless and error-prone."""
         raise AttributeError('BiDict cannot be defaulted')
 
