@@ -45,7 +45,37 @@ class BiDict(dict):
         dict.__setitem__(self, key, value)
         dict.__setitem__(self.codict, value, key)
 
+    def pop(self, key, *args):
+        """Remove specified key and return the
+        corresponding value.  If key is not found, d is
+        returned if given, otherwise KeyError is raised.
+        """
+        if len(*args) > 1:
+            raise TypeError(
+                'pop() takes 1 optional argument but more were given')
+        if key not in self:
+            if len(args) == 0:
+                raise KeyError(key)
+            else:
+                return args[0]
+        value = self[key]
+        del self[key]
+        return value
+
+    def popitem(self):
+        """Remove and return some (key, value) pair as a 2-tuple;
+        but raise KeyError if empty.
+        """
+        k, v = dict.popitem(self)
+        dict.__delitem__(self.codict, v)
+        return (k, v)
+
+    def setdefault(k, *args):
+        """Defaulting a BiDict is disallowed as useless and error-prone."""
+        raise AttributeError('BiDict cannot be defaulted')
+
 class BiMap:
+
     """Two-way (bijective) dictionary map. Can lookup by key or
     by value. Both keys and values must be hashable.
 
